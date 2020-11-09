@@ -1,26 +1,27 @@
-import React, { useState, useContext } from "react"
+import React, { useContext } from "react"
 import SignIn from "./components/SignIn"
 import SignUp from "./components/SignUp"
 import { UserContext } from "./context/UserContext"
 
 function App() {
-    const [isLogged, setIsLogged] = useState(false)
-    const [isSigned, setIsSigned] = useState(false)
-    const { userInfo } = useContext(UserContext)
+    const { userInfo, isLogged, isSigned } = useContext(UserContext)
 
     return (
         <>
             <header>
-                <h1>Welcome!</h1>
                 {isLogged ? (
-                    <p>Welcome {userInfo.firstName + userInfo.lastName}</p>
+                    <h1>Welcome {userInfo.firstName + userInfo.lastName}</h1>
                 ) : (
-                    <p>
-                        Sign Up for access or Sing In if you already have an
-                        account!
-                    </p>
+                    <>
+                        <h1>Welcome!</h1>
+                        <p>
+                            Sign Up for access or Sing In if you already have an
+                            account!
+                        </p>
+                    </>
                 )}
             </header>
+            {isLogged ? "" : isSigned ? <SignIn /> : <SignUp />}
         </>
     )
 }

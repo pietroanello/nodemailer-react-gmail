@@ -10,10 +10,29 @@ function UserContextProvider(props) {
         lastName: null,
     })
 
-    useEffect(() => {
-        fetch("/api/auth/prova")
-            .then(res => res.json())
-            .then(data => console.log(data))
+    const token = localStorage.getItem("AuthToken")
+    const options = {
+        method: "GET",
+        headers: { Authorization: "Bearer " + token },
+    }
+
+    useEffect(async () => {
+        if (token) {
+            try {
+                const response = await fetch("api/auth/", options)
+                const data = await response.json()
+                if (response.status === 200) {
+                    setIsLogged(true)
+                    setUserInfo(prev => ({
+                        ...prev,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                    }))
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        }
     }, [])
 
     return (

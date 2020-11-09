@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
 import CssBaseline from "@material-ui/core/CssBaseline"
@@ -9,6 +9,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
 import Container from "@material-ui/core/Container"
+import useRegisterLogin from "../hooks/useRegisterLogin"
+import { UserContext } from "../context/UserContext"
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -31,6 +33,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function SignUp() {
+    const { setIsSigned } = useContext(UserContext)
+    const { userData, handleChange, signUp } = useRegisterLogin()
     const classes = useStyles()
 
     return (
@@ -43,7 +47,7 @@ export default function SignUp() {
                 <Typography component='h1' variant='h5'>
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} onSubmit={signUp}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -55,6 +59,8 @@ export default function SignUp() {
                                 id='firstName'
                                 label='First Name'
                                 autoFocus
+                                value={userData.firstName}
+                                onChange={handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -66,6 +72,8 @@ export default function SignUp() {
                                 label='Last Name'
                                 name='lastName'
                                 autoComplete='lname'
+                                value={userData.lastName}
+                                onChange={handleChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -77,6 +85,8 @@ export default function SignUp() {
                                 label='Email Address'
                                 name='email'
                                 autoComplete='email'
+                                value={userData.email}
+                                onChange={handleChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -89,6 +99,8 @@ export default function SignUp() {
                                 type='password'
                                 id='password'
                                 autoComplete='current-password'
+                                value={userData.password}
+                                onChange={handleChange}
                             />
                         </Grid>
                     </Grid>
@@ -103,7 +115,11 @@ export default function SignUp() {
                     </Button>
                     <Grid container justify='flex-end'>
                         <Grid item>
-                            <Link href='#' variant='body2'>
+                            <Link
+                                href='#'
+                                variant='body2'
+                                onClick={() => setIsSigned(true)}
+                            >
                                 Already have an account? Sign in
                             </Link>
                         </Grid>
