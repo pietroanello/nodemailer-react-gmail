@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-const UserContext = React.createContext
+const UserContext = React.createContext()
 
 function UserContextProvider(props) {
     const [userInfo, setUserInfo] = useState({
@@ -9,7 +9,7 @@ function UserContextProvider(props) {
     })
 
     return (
-        <UserContext.Provider value={(userInfo, setUserInfo)}>
+        <UserContext.Provider value={{ userInfo, setUserInfo }}>
             {props.children}
         </UserContext.Provider>
     )
