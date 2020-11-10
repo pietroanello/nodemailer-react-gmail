@@ -2,34 +2,43 @@ import React, { useContext } from "react"
 import SignIn from "./components/SignIn"
 import SignUp from "./components/SignUp"
 import { UserContext } from "./context/UserContext"
-import useRegisterLogin from "./hooks/useRegisterLogin"
+import Main from "./components/Main"
 
 function App() {
     const { userInfo, isLogged, isSigned } = useContext(UserContext)
-    const { signOut } = useRegisterLogin()
 
     return (
         <>
-            <header>
+            <header className='title'>
                 {isLogged ? (
                     <>
                         <h1>
                             Welcome{" "}
                             {`${userInfo.firstName} ${userInfo.lastName}`}
                         </h1>
-                        <button onClick={signOut}>Logout</button>
                     </>
                 ) : (
                     <>
                         <h1>Welcome!</h1>
-                        <p>
+                        <h3>
                             Sign Up for access or Sing In if you already have an
                             account!
-                        </p>
+                        </h3>
                     </>
                 )}
             </header>
-            {isLogged ? "" : isSigned ? <SignIn /> : <SignUp />}
+            {isLogged ? <Main /> : isSigned ? <SignIn /> : <SignUp />}
+            <p className='credits'>
+                For the love of learning
+                <span>
+                    <a
+                        href='https://github.com/pietroanello/nodemailer-react-gmail'
+                        target='_blank'
+                    >
+                        <img src='github-logo-small.svg' alt='github logo' />
+                    </a>
+                </span>
+            </p>
         </>
     )
 }

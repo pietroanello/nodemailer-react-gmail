@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import App from "./App"
 import { UserContextProvider } from "./context/UserContext"
 import { SnackbarProvider } from "notistack"
+import "./index.css"
 
 ReactDOM.render(
     <SnackbarProvider
