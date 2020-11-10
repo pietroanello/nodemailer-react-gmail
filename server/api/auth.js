@@ -31,12 +31,12 @@ authRouter.post("/signin", async (req, res, next) => {
                 let err = new ErrorHandler(401, "Password errata.")
                 next(err)
             } else {
-                const options = {
+                const payload = {
                     firstName: user.firstName,
                     lastName: user.lastName,
                     email: user.email,
                 }
-                const token = await jwt.sign(options, jwt_key, {
+                const token = await jwt.sign(payload, jwt_key, {
                     expiresIn: "1d",
                 })
                 res.status(200).json({ options, token })
