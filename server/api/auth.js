@@ -4,10 +4,12 @@ import bcrypt from "bcrypt"
 import dotenv from "dotenv"
 import { ErrorHandler } from "../error.js"
 import jwt from "jsonwebtoken"
+import sendMail from "../functions/sendMail.js"
 
 dotenv.config()
 const authRouter = express.Router()
 const jwt_key = process.env.JWT_KEY
+const port = process.env.PORT
 const usersDb = new NedbAsyncStore({
     filename: "./collections/users.db",
     autoload: true,
@@ -59,10 +61,41 @@ authRouter.post("/signup", async (req, res, next) => {
                 lastName: lastName,
                 password: hashedPass,
                 email: email,
-                isVerified: true,
+                isVerified: false,
             })
-            // Manda email per verifica utente
-            res.status(200).json(newUser)
+            const link = `${req.protocol}://${req.hostname}:${port}/api/auth/verify/${newUser._id}`
+            const mailOptions = {
+                from: "Gmail App Tutorial <pietroanello.dev@gmail.com>",
+                to: newUser.email,
+                subject: "Verify your email address",
+                text:
+                    "Benvenuto! Clicca sul seguente link per verificare il tuo indirizzo email, o copialo e incollalo nella barra degli indirizzi: " +
+                    link,
+                html: `<h3>Benvenuto!</h3>
+                <p><a href="${link}" target="_blank">Clicca qui</a> per verificare il tuo indirizzo email.</p>`,
+            }
+
+            const mailResult = await sendMail(mailOptions)
+            res.status(200).json(`mail sent to ${mailResult.accepted[0]}`)
+        }
+    } catch (err) {
+        next(err)
+    }
+})
+
+authRouter.get("/verify/:user_id", async (req, res, next) => {
+    const userId = req.params.user_id
+    try {
+        const user = await usersDb.findOne({ _id: userId })
+        if (!user) {
+            let err = new ErrorHandler(404, "Utente non registrato.")
+            next(err)
+        } else {
+            const updatedUser = usersDb.update(
+                { _id: userId },
+                { $set: { isVerified: true } }
+            )
+            res.status(200).send("Utente confermato!")
         }
     } catch (err) {
         next(err)

@@ -27,13 +27,19 @@ export default function useRegisterLogin() {
         }))
     }
 
+    function signOut(e) {
+        e.preventDefault()
+        localStorage.removeItem("AuthToken")
+        setIsLogged(false)
+    }
+
     async function signUp(e) {
         e.preventDefault()
         try {
             const response = await fetch("/api/auth/signup", options)
             const data = await response.json()
             // Inserire snackbar(notistack) di mail inviata per la verifica
-            response.status === 200 && setIsSigned(true)
+            response.status === 200 && console.log(data)
         } catch (err) {
             console.error(err)
         }
@@ -61,5 +67,5 @@ export default function useRegisterLogin() {
         }
     }
 
-    return { userData, handleChange, signUp, signIn }
+    return { userData, handleChange, signUp, signIn, signOut }
 }
