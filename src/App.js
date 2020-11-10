@@ -13,17 +13,17 @@ function App() {
                 {isLogged ? (
                     <>
                         <h1>
-                            Welcome{" "}
+                            Welcome <br />
                             {`${userInfo.firstName} ${userInfo.lastName}`}
                         </h1>
                     </>
                 ) : (
                     <>
                         <h1>Welcome!</h1>
-                        <h3>
-                            Sign Up for access or Sing In if you already have an
-                            account!
-                        </h3>
+                        <h4>
+                            Sign Up for access or Sing In <br />
+                            if you already have an account!
+                        </h4>
                     </>
                 )}
             </header>

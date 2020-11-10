@@ -24,10 +24,16 @@ const useStyles = makeStyles(theme => ({
     avatar: {
         margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
+        [theme.breakpoints.down("md")]: {
+            display: "none",
+        },
     },
     form: {
         width: "100%", // Fix IE 11 issue.
         marginTop: theme.spacing(1),
+        [theme.breakpoints.down("md")]: {
+            marginTop: theme.spacing(0),
+        },
     },
     submit: {
         margin: theme.spacing(3, 0, 2),

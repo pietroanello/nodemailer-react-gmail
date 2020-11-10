@@ -10,29 +10,31 @@ function UserContextProvider(props) {
         lastName: null,
     })
 
-    const token = localStorage.getItem("AuthToken")
-    const options = {
-        method: "GET",
-        headers: { Authorization: "Bearer " + token },
-    }
-
-    useEffect(async () => {
-        if (token) {
-            try {
-                const response = await fetch("api/auth/", options)
-                const data = await response.json()
-                if (response.status === 200) {
-                    setIsLogged(true)
-                    setUserInfo(prev => ({
-                        ...prev,
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                    }))
+    useEffect(() => {
+        const token = localStorage.getItem("AuthToken")
+        const options = {
+            method: "GET",
+            headers: { Authorization: "Bearer " + token },
+        }
+        async function getToken() {
+            if (token) {
+                try {
+                    const response = await fetch("api/auth/", options)
+                    const data = await response.json()
+                    if (response.status === 200) {
+                        setIsLogged(true)
+                        setUserInfo(prev => ({
+                            ...prev,
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                        }))
+                    }
+                } catch (err) {
+                    console.log(err)
                 }
-            } catch (err) {
-                console.log(err)
             }
         }
+        getToken()
     }, [])
 
     return (
