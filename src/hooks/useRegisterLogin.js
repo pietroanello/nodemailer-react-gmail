@@ -1,7 +1,9 @@
 import { useState, useContext } from "react"
 import { UserContext } from "../context/UserContext"
+import { useSnackbar } from "notistack"
 
 export default function useRegisterLogin() {
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const { setUserInfo, setIsSigned, setIsLogged } = useContext(UserContext)
     const [userData, setUserData] = useState({
         firstName: "",
@@ -38,8 +40,8 @@ export default function useRegisterLogin() {
         try {
             const response = await fetch("/api/auth/signup", options)
             const data = await response.json()
-            // Inserire snackbar(notistack) di mail inviata per la verifica
-            response.status === 200 && console.log(data)
+            response.status === 200 &&
+                enqueueSnackbar(data, { variant: "success" })
         } catch (err) {
             console.error(err)
         }
