@@ -1,8 +1,10 @@
+import { useSnackbar } from "notistack"
 import React, { useState, useEffect } from "react"
 
 const UserContext = React.createContext()
 
 function UserContextProvider(props) {
+    const { enqueueSnackbar } = useSnackbar()
     const [isLogged, setIsLogged] = useState(false)
     const [isSigned, setIsSigned] = useState(false)
     const [userInfo, setUserInfo] = useState({
@@ -30,7 +32,7 @@ function UserContextProvider(props) {
                         }))
                     }
                 } catch (err) {
-                    console.log(err)
+                    enqueueSnackbar(err.message, { variant: "error" })
                 }
             }
         }

@@ -3,7 +3,7 @@ import { UserContext } from "../context/UserContext"
 import { useSnackbar } from "notistack"
 
 export default function useRegisterLogin() {
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const { enqueueSnackbar } = useSnackbar()
     const { setUserInfo, setIsSigned, setIsLogged } = useContext(UserContext)
     const [userData, setUserData] = useState({
         firstName: "",
@@ -40,10 +40,13 @@ export default function useRegisterLogin() {
         try {
             const response = await fetch("/api/auth/signup", options)
             const data = await response.json()
-            response.status === 200 &&
+            if (response.status === 200) {
                 enqueueSnackbar(data, { variant: "success" })
+            } else {
+                enqueueSnackbar(data.message, { variant: "error" })
+            }
         } catch (err) {
-            console.error(err)
+            enqueueSnackbar(err.message, { variant: "error" })
         }
     }
 
@@ -62,10 +65,10 @@ export default function useRegisterLogin() {
                 }))
                 setIsLogged(true)
             } else {
-                console.log(data)
+                enqueueSnackbar(data.message, { variant: "error" })
             }
         } catch (err) {
-            console.error(err)
+            enqueueSnackbar(err.message, { variant: "error" })
         }
     }
 
