@@ -63,7 +63,7 @@ authRouter.post("/signup", async (req, res, next) => {
                 email: email,
                 isVerified: false,
             })
-            const link = `${req.protocol}://${req.hostname}:${port}/api/auth/verify/${newUser._id}`
+            const link = `${req.protocol}://${req.hostname}/api/auth/verify/${newUser._id}`
             const mailOptions = {
                 from: "Gmail App Tutorial <pietroanello.dev@gmail.com>",
                 to: newUser.email,
