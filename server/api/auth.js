@@ -63,7 +63,7 @@ authRouter.post("/signup", async (req, res, next) => {
                 email: email,
                 isVerified: false,
             })
-            const link = `${req.protocol}://${req.hostname}/api/auth/verify/${newUser._id}`
+            const link = `${req.protocol}://${req.hostname}:${port}/api/auth/verify/${newUser._id}`
             const mailOptions = {
                 from: "Gmail App Tutorial <pietroanello.dev@gmail.com>",
                 to: newUser.email,
@@ -97,6 +97,18 @@ authRouter.get("/verify/:user_id", async (req, res, next) => {
             )
             res.status(200).send("Utente confermato!")
         }
+    } catch (err) {
+        next(err)
+    }
+})
+
+authRouter.delete("/delete", async (req, res, next) => {
+    const header = req.header("Authorization")
+    const [type, token] = header.split(" ")
+    try {
+        let payload = await jwt.verify(token, jwt_key)
+        const removedUser = await usersDb.remove({ email: payload.email }, {})
+        res.status(200).json("Utente rimosso con successo.")
     } catch (err) {
         next(err)
     }
