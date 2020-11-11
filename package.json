@@ -21,7 +21,7 @@
     "build": "react-scripts build && (cd server && npm install)",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "cd server && node server.js"
+    "start": "react-scripts build && (cd server && node server.js)"
   },
   "eslintConfig": {
     "extends": [
