@@ -9,7 +9,7 @@ import sendMail from "../functions/sendMail.js"
 dotenv.config()
 const authRouter = express.Router()
 const jwt_key = process.env.JWT_KEY
-const port = process.env.PORT
+const port = process.env.PORT || 5050
 const usersDb = new NedbAsyncStore({
     filename: "./collections/users.db",
     autoload: true,
