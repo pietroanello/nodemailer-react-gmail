@@ -1,5 +1,7 @@
 import React, { useContext } from "react"
 import Avatar from "@material-ui/core/Avatar"
+import Backdrop from "@material-ui/core/Backdrop"
+import CircularProgress from "@material-ui/core/CircularProgress"
 import Button from "@material-ui/core/Button"
 import TextField from "@material-ui/core/TextField"
 import Link from "@material-ui/core/Link"
@@ -20,6 +22,7 @@ const useStyles = makeStyles(theme => ({
         padding: "1.5rem",
         backgroundColor: "white",
         borderRadius: "4px",
+        position: "relative",
     },
     avatar: {
         margin: theme.spacing(1),
@@ -43,16 +46,24 @@ const useStyles = makeStyles(theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    backdrop: {
+        position: "absolute",
+        zIndex: 1,
+        color: "#fff",
+    },
 }))
 
 export default function SignUp() {
     const { setIsSigned } = useContext(UserContext)
-    const { userData, handleChange, signUp } = useRegisterLogin()
+    const { userData, handleChange, signUp, isLoading } = useRegisterLogin()
     const classes = useStyles()
 
     return (
         <Container component='main' maxWidth='xs'>
             <div className={classes.paper}>
+                <Backdrop className={classes.backdrop} open={isLoading}>
+                    <CircularProgress color='inherit' />
+                </Backdrop>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
@@ -128,7 +139,6 @@ export default function SignUp() {
                     <Grid container justify='flex-end'>
                         <Grid item>
                             <Link
-                                href='#'
                                 variant='body2'
                                 onClick={() => setIsSigned(true)}
                             >
