@@ -5,6 +5,7 @@ import { useSnackbar } from "notistack"
 export default function useRegisterLogin() {
     const { enqueueSnackbar } = useSnackbar()
     const { setUserInfo, setIsSigned, setIsLogged } = useContext(UserContext)
+    const [isLoading, setIsLoading] = useState(false)
     const [userData, setUserData] = useState({
         firstName: "",
         lastName: "",
@@ -37,12 +38,15 @@ export default function useRegisterLogin() {
 
     async function signUp(e) {
         e.preventDefault()
+        setIsLoading(true)
         try {
             const response = await fetch("/api/auth/signup", options)
             const data = await response.json()
             if (response.status === 200) {
+                setIsLoading(false)
                 enqueueSnackbar(data, { variant: "success" })
             } else {
+                setIsLoading(false)
                 enqueueSnackbar(data.message, { variant: "error" })
             }
         } catch (err) {
@@ -72,5 +76,37 @@ export default function useRegisterLogin() {
         }
     }
 
-    return { userData, handleChange, signUp, signIn, signOut }
+    async function deleteUser(e) {
+        e.preventDefault()
+        const token = localStorage.getItem("AuthToken")
+        const headers = {
+            Authorization: "Bearer " + token,
+        }
+        const delOptions = {
+            method: "DELETE",
+            headers: headers,
+        }
+        try {
+            const response = await fetch("/api/auth/delete", delOptions)
+            const data = await response.json()
+            if (response.status === 200) {
+                signOut(e)
+                enqueueSnackbar(data, { variant: "success" })
+            } else {
+                enqueueSnackbar(data.message, { variant: "error" })
+            }
+        } catch (err) {
+            enqueueSnackbar(err.message, { variant: "error" })
+        }
+    }
+
+    return {
+        userData,
+        handleChange,
+        signUp,
+        signIn,
+        signOut,
+        deleteUser,
+        isLoading,
+    }
 }
