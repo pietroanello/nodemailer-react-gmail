@@ -17,12 +17,11 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "frontend": "react-scripts start",
-    "build": "react-scripts build",
+    "start-client": "react-scripts start",
+    "build": "react-scripts build && (cd server && npm install)",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "npm run build && (cd server && node server.js)",
-    "postinstall": "cd server && npm install"
+    "start": "cd server && node server.js"
   },
   "eslintConfig": {
     "extends": [
